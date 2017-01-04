@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8"/>
+    <script src="/common/Qrcode/Qrcode.js"></script>
+    <style>
+        #qrcode{
+            /*text-align: center;*/
+            /*display: table-cell;*/
+            /*width: 96px;*/
+            /*height: 96px;*/
+            /*vertical-align:middle;*/
+            /*position: relative;*/
+        }
+    </style>
+</head>
+<body>
+<div id="qrcode">
+</div>
+
+<input type="text" id="getval"/> <button id="send">点击刷新二维码</button>
+<script>
+    window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 96,//设置宽高
+            height : 96
+        });
+        qrcode.makeCode("http://www.baidu.com");
+        document.getElementById("send").onclick =function(){
+            console.log('click');
+            qrcode.makeCode(document.getElementById("getval").value);
+        }
+    }
+
+function toUtf8(str) {    
+    var out, i, len, c;    
+    out = "";    
+    len = str.length;    
+    for(i = 0; i < len; i++) {    
+        c = str.charCodeAt(i);    
+        if ((c >= 0x0001) && (c <= 0x007F)) {    
+            out += str.charAt(i);    
+        } else if (c > 0x07FF) {    
+            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));    
+            out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));    
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+        } else {    
+            out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));    
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+        }    
+    }    
+    return out;    
+} 
+</script>
+</body>
+</html>
