@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>js生成二维码-支持中文</title>
     <meta charset="utf-8"/>
-    <script src="/common/Qrcode/Qrcode.js"></script>
     <style>
         #qrcode{
             /*text-align: center;*/
@@ -20,38 +19,44 @@
 </div>
 
 <input type="text" id="getval"/> <button id="send">点击刷新二维码</button>
+<!-- 建议使用cdn -->
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<!-- 若cdn不可用则使用本地文件 -->
+<!-- <script src="./jquery-2.1.1.min.js"></script>
+<script src="./jquery.qrcode.min.js"></script> -->
 <script>
-    window.onload =function(){
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            width : 96,//设置宽高
-            height : 96
-        });
-        qrcode.makeCode("http://www.baidu.com");
-        document.getElementById("send").onclick =function(){
-            console.log('click');
-            qrcode.makeCode(document.getElementById("getval").value);
+    $('#send').click(function () {
+        var val = $('#getval').val();
+        if (!val) {
+            alert('请输入二维码内容');
         }
-    }
+        val = toUtf8(val);
+        // $('#qrcode').qrcode(val);
+        // 设置长宽
+        $('#qrcode').qrcode({width: 64,height: 64,text: val});
+    })
+  
 
-function toUtf8(str) {    
-    var out, i, len, c;    
-    out = "";    
-    len = str.length;    
-    for(i = 0; i < len; i++) {    
-        c = str.charCodeAt(i);    
-        if ((c >= 0x0001) && (c <= 0x007F)) {    
-            out += str.charAt(i);    
-        } else if (c > 0x07FF) {    
-            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));    
-            out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));    
-            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
-        } else {    
-            out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));    
-            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+    function toUtf8(str) {    
+        var out, i, len, c;    
+        out = "";    
+        len = str.length;    
+        for(i = 0; i < len; i++) {    
+            c = str.charCodeAt(i);    
+            if ((c >= 0x0001) && (c <= 0x007F)) {    
+                out += str.charAt(i);    
+            } else if (c > 0x07FF) {    
+                out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));    
+                out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));    
+                out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+            } else {    
+                out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));    
+                out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+            }    
         }    
-    }    
-    return out;    
-} 
+        return out;    
+    } 
 </script>
 </body>
 </html>
